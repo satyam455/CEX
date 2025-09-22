@@ -19,23 +19,21 @@ pub struct Order {
     pub side: Side,
     pub price: Decimal,
     pub quantity: Decimal,
-    pub filled_quantity: Decimal, //@note what it means
+    pub filled_quantity: Decimal,
     pub timestamp: i64,
 }
 
 #[derive(Debug, Clone)]
 pub struct Fill {
-    pub trade_id: Uuid, //@note why we are taking uuid
+    pub trade_id: Uuid,
     pub price: Decimal,
     pub quantity: Decimal,
-    pub maker_order_id: Uuid, //@note why we are taking uuid
-    pub taker_order_id: Uuid, //@note why we are taking uuid
+    pub maker_order_id: Uuid,
+    pub taker_order_id: Uuid,
     pub timestamp: i64,
 }
 
 #[derive(Deserialize, Serialize, Debug, PartialEq, Eq, Clone)]
-///@note why are we using Eq?
-
 pub enum Side {
     Buy,
     Sell,

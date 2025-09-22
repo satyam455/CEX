@@ -100,7 +100,6 @@ pub async fn cancel_order_route(
 ) -> impl Responder {
     let (order_id, user_id) = path.into_inner();
     let msg = CancelOrder { order_id, user_id };
-    ///@note where is CancelOrder coming from?
     match engine_addr.send(msg).await {
         Ok(Ok(id)) => HttpResponse::Ok().json(crate::output::CreateOrderResponse {
             status: "Cancel request accepted".to_string(),
@@ -114,7 +113,6 @@ pub async fn cancel_order_route(
 #[get("/depth")]
 pub async fn get_depth_route(engine_addr: web::Data<Addr<MatchingEngine>>) -> impl Responder {
     match engine_addr.send(GetDepth).await {
-        ///@note where is GetDepth coming from?
         Ok(Ok(depth)) => HttpResponse::Ok().json(depth),
         Ok(Err(e)) => HttpResponse::BadRequest().body(e),
         Err(_) => HttpResponse::InternalServerError().body("Actor mailbox error"),

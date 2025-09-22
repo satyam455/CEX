@@ -16,7 +16,7 @@ pub struct DeleteOrderResponse {
 
 // // --- API Request & Response Types ---
 
-#[derive(Deserialize, Debug)] ////@note whats its use?
+#[derive(Deserialize, Debug)]
 pub struct CreateOrderRequest {
     pub user_id: String,
     pub side: Side,
@@ -24,7 +24,7 @@ pub struct CreateOrderRequest {
     pub quantity: String,
 }
 
-#[derive(Serialize, Debug)] ////@note whats its use?
+#[derive(Serialize, Debug)]
 pub struct OrderResponse {
     pub order_id: String,
     pub user_id: String,
@@ -35,7 +35,7 @@ pub struct OrderResponse {
     pub timestamp: i64,
 }
 
-#[derive(Serialize, Debug)] ////@note whats its use?
+#[derive(Serialize, Debug)]
 pub struct DepthResponse {
     pub bids: Vec<(String, String)>,
     pub asks: Vec<(String, String)>,
