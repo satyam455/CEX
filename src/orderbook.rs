@@ -9,7 +9,6 @@ use std::collections::{BTreeMap, VecDeque};
 // }
 
 pub struct Orderbook {
-    ////@note why we created this struct?
     pub bids: BTreeMap<std::cmp::Reverse<Decimal>, VecDeque<Order>>,
     pub asks: BTreeMap<Decimal, VecDeque<Order>>,
 }
