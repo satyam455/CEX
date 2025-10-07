@@ -1,2 +1,5 @@
 target/
 Cargo.lock
+
+if (-not (Select-String .gitignore -Pattern '^\s*target/\s*$' -Quiet)) { Add-Content .gitignore 'target/' }
+if (-not (Select-String .gitignore -Pattern '^\s*Cargo\.lock\s*$' -Quiet)) { Add-Content .gitignore 'Cargo.lock' }
