@@ -5,7 +5,7 @@ use std::collections::HashMap;
 
 #[derive(Debug, Clone)]
 pub struct Market {
-    pub pair: TradinPair,
+    pub pair: TradingPair,
     pub orderbook: Orderbook,
     pub base_liquidity: Decimal,  //available base token
     pub quote_liquidity: Decimal, //available quote token
@@ -26,7 +26,7 @@ impl Market {
     }
 
     pub fn add_liquidity(&mut self, base_amt: Decimal, quote_amt: Decimal) {
-        self.base_liquidty += base_amt;
+        self.base_liquidity += base_amt;
         self.quote_liquidity += quote_amt;
 
         if self.base_liquidity > Decimal::ZERO {
@@ -50,6 +50,10 @@ impl MarketManager {
         Self {
             markets: HashMap::new(),
         }
+    }
+
+    pub fn get_market_mut(&mut self, key: &str) -> Option<&mut Market> {
+        self.markets.get_mut(key)
     }
 
     pub fn create_market(

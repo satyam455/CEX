@@ -90,38 +90,39 @@ impl Actor for MatchingEngine {
 }
 
 // actor handling the create order message
-// impl Handler<CreateMarketOrder> for MatchingEngine {
-//     type Result = Result<Uuid, String>;
+impl Handler<CreateMarketOrder> for MatchingEngine {
+    type Result = Result<Uuid, String>;
 
-//     fn handle(&mut self, msg: CreateMarketOrder, _ctx: &mut Self::Context) -> Self::Result {
-//         let order_id = Uuid::new_v4();
-//         let mut taker_order = Order {
-//             order_id,
-//             user_id: msg.user_id,
-//             side: msg.side.clone(),
-//             price: msg.price,
-//             quantity: msg.quantity,
-//             filled_quantity: Decimal::ZERO,
-//             timestamp: chrono::Utc::now().timestamp_millis(),
-//         };
+    fn handle(&mut self, msg: CreateMarketOrder, _ctx: &mut Self::Context) -> Self::Result {
+        let order_id = Uuid::new_v4();
+        let mut taker_order = Order {
+            order_id,
+            user_id: msg.user_id,
+            side: msg.side.clone(),
+            price: msg.price,
+            quantity: msg.quantity,
+            filled_quantity: Decimal::ZERO,
+            timestamp: chrono::Utc::now().timestamp_millis(),
+        };
 
-//         println!("Engine processing order: {:?}", taker_order.order_id);
-//         let fills = self.match_order(&mut taker_order);
+        println!("Engine processing order: {:?}", taker_order.order_id);
+        let fills = self.match_order(&mut taker_order);
 
-//         if !fills.is_empty() {
-//             println!("Matched {} fills.", fills.len());
-//             // TODO: Persist fills to DB and publish to Redis
-//         }
+        if !fills.is_empty() {
+            println!("Matched {} fills.", fills.len());
+            // TODO: Persist fills to DB and publish to Redis
+        }
 
-//         if taker_order.quantity > taker_order.filled_quantity {
-//             self.add_order_to_book(taker_order.clone());
-//         }
+        if taker_order.quantity > taker_order.filled_quantity {
+            self.add_order_to_book(taker_order.clone());
+        }
 
-//         self.orders.insert(order_id, taker_order);
-//         Ok(order_id)
-//     }
-// // }
-impl Handler<CreateMarketOrder> for EnhancedMatchingEngine {
+        self.orders.insert(order_id, taker_order);
+        Ok(order_id)
+    }
+}
+
+impl Handler<CreateMarketOrder> for MatchingEngine {
     type Result = Result<Uuid, String>;
 
     fn handle(&mut self, msg: CreateMarketOrder, _ctx: &mut Self::Context) -> Self::Result {
@@ -178,36 +179,36 @@ impl Handler<CancelOrder> for MatchingEngine {
     }
 }
 
-// impl Handler<GetDepth> for MatchingEngine {
-//     type Result = Result<crate::output::DepthResponse, String>;
+impl Handler<GetDepth> for MatchingEngine {
+    type Result = Result<crate::output::DepthResponse, String>;
 
-//     fn handle(&mut self, _msg: GetDepth, _ctx: &mut Self::Context) -> Self::Result {
-//         let bids = self
-//             .orderbook
-//             .bids
-//             .iter()
-//             .map(|(price, orders)| {
-//                 let total_quantity: Decimal =
-//                     orders.iter().map(|o| o.quantity - o.filled_quantity).sum();
-//                 (price.0.to_string(), total_quantity.to_string())
-//             })
-//             .collect();
+    fn handle(&mut self, _msg: GetDepth, _ctx: &mut Self::Context) -> Self::Result {
+        let bids = self
+            .orderbook
+            .bids
+            .iter()
+            .map(|(price, orders)| {
+                let total_quantity: Decimal =
+                    orders.iter().map(|o| o.quantity - o.filled_quantity).sum();
+                (price.0.to_string(), total_quantity.to_string())
+            })
+            .collect();
 
-//         let asks = self
-//             .orderbook
-//             .asks
-//             .iter()
-//             .map(|(price, orders)| {
-//                 let total_quantity: Decimal =
-//                     orders.iter().map(|o| o.quantity - o.filled_quantity).sum();
-//                 (price.to_string(), total_quantity.to_string())
-//             })
-//             .collect();
+        let asks = self
+            .orderbook
+            .asks
+            .iter()
+            .map(|(price, orders)| {
+                let total_quantity: Decimal =
+                    orders.iter().map(|o| o.quantity - o.filled_quantity).sum();
+                (price.to_string(), total_quantity.to_string())
+            })
+            .collect();
 
-//         Ok(crate::output::DepthResponse { bids, asks })
-//     }
-// }
-impl Handler<GetMarketDepth> for EnhancedMatchingEngine {
+        Ok(crate::output::DepthResponse { bids, asks })
+    }
+}
+impl Handler<GetMarketDepth> for MatchingEngine {
     type Result = Result<crate::output::DepthResponse, String>;
 
     fn handle(&mut self, msg: GetMarketDepth, _ctx: &mut Self::Context) -> Self::Result {

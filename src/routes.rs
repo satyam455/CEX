@@ -16,26 +16,26 @@ use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use uuid::Uuid;
 
-// #[post("/order")]
-// pub async fn create_order(
-//     body: Json<CreateOrderInput>,
-//     orderbook: Data<&Arc<Mutex<Orderbook>>>,
-// ) -> impl Responder {
-//     let price = body.0.price;
-//     let quantity = body.0.quantity;
-//     let user_id = body.0.user_id;
-//     let side = body.0.side;
+#[post("/order")]
+pub async fn create_order(
+    body: Json<CreateOrderInput>,
+    orderbook: Data<&Arc<Mutex<Orderbook>>>,
+) -> impl Responder {
+    let price = body.0.price;
+    let quantity = body.0.quantity;
+    let user_id = body.0.user_id;
+    let side = body.0.side;
 
-//     let mut orderbook = orderbook.lock().unwrap();
-//     orderbook.create_order(price, quantity, user_id, side);
+    let mut orderbook = orderbook.lock().unwrap();
+    orderbook.create_order(price, quantity, user_id, side);
 
-//     return HttpResponse::Ok().json(CreateOrderResponse {
-//         order_id: String::from("Response"),
-//     });
+    return HttpResponse::Ok().json(CreateOrderResponse {
+        order_id: String::from("Response"),
+    });
 
-//     // println!("{:?}", body);
-//     // "Order created"
-// }
+    // println!("{:?}", body);
+    // "Order created"
+}
 #[post("/order")]
 
 pub async fn create_order_route(

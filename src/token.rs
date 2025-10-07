@@ -19,7 +19,7 @@ pub struct TradingPair {
     pub pair_symbol: String, // eg "TAN_KAN"
 }
 
-impl Tradingpair {
+impl TradingPair {
     pub fn new(base: &str, quote: &str) -> Self {
         Self {
             base_tkn: base.to_string(),
@@ -40,7 +40,7 @@ impl TokenRegistry {
             tokens: HashMap::new(),
         }
     }
-}
+
 
 
 pub fn create_token(
@@ -67,11 +67,11 @@ pub fn create_token(
         self.tokens.get(symbol)
     }
 }
-
+}
 
 impl Default for TokenRegistry {
     fn default() -> Self {
-        let mut registry = Self.new();
+        let mut registry = Self::new();
 
         let tokens_to_create = vec![
             ("TAN", "Tan Token", 18, Decimal::new(1_000_000, 0)), // 1M TAN
